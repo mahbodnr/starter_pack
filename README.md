@@ -1,2 +1,2 @@
-# starter_pack
-My Pytorch project starter pack
+# Starter Pack
+![Image](imgs/Starter_Pack.jpg)
