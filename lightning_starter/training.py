@@ -75,6 +75,7 @@ def train(args):
         logger = pl.loggers.CSVLogger(save_dir="logs", name=experiment_name)
 
     # Set up model
+    assert args.model_name is not None, "Model name is required."
     net = Net(args)
 
     # Set up trainer

@@ -3,12 +3,11 @@ import pytorch_lightning as pl
 import torch
 import wandb
 
-
 from timm.optim import create_optimizer_v2, optimizer_kwargs
 from timm.scheduler import create_scheduler_v2
 from timm.models import create_model
 
-from lightning_starter.models import cnn
+from lightning_starter.models import *
 from lightning_starter.utils import get_criterion, get_scheduler, get_layer_outputs
 from lightning_starter.augmentation import CutMix, MixUp
 
@@ -75,7 +74,11 @@ class Net(pl.LightningModule):
 
         if self.scheduler is None:
             return self.optimizer
-        return [self.optimizer], [self.scheduler]
+        return {
+            "optimizer": self.optimizer,
+            "lr_scheduler": self.scheduler,
+            "monitor": "train_loss",
+        }
 
     def on_fit_start(self):
         self.print_model_summary()
@@ -187,6 +190,7 @@ class Net(pl.LightningModule):
             self.logger.experiment.end()
 
     def print_model_summary(self):
+        print(self.model)
         summary = pl.utilities.model_summary.ModelSummary(
             self, max_depth=self.hparams.model_summary_depth
         )

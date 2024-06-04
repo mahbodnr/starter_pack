@@ -213,7 +213,20 @@ def get_dataloader(args):
     return train_dl, test_dl
 
 def get_scheduler(optimizer, args):
-    if args.lr_scheduler == "cosine":
+    if args.lr_scheduler == "reduce_on_plateau":
+        # TODO: Add ReduceLROnPlateau parameters
+        scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(
+            optimizer,
+            mode="min",
+            # factor=args.lr_scheduler_factor,
+            # patience=args.lr_scheduler_patience,
+            verbose=True,
+            # threshold=args.lr_scheduler_threshold,
+            # threshold_mode="rel",
+            # cooldown=args.lr_scheduler_cooldown,
+            min_lr=args.min_lr,
+        )
+    elif args.lr_scheduler == "cosine":
         scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(
             optimizer,
             T_max=(
